@@ -5,7 +5,7 @@ bl_info = {
     "blender": (3, 4, 0),
     "location": "File > Export > Custom Props Anim (.panim)",
     "description": "Export all animations of custom properties as a binary .panim file",
-    "doc_url": "",
+    "doc_url": "https://github.com/Synphonyte/blender-panim-exporter",
     "category": "Import-Export",
 }
 
@@ -27,17 +27,6 @@ def f32(f):
 
 
 def write_anim_data(context, filepath):
-    """
-    fps - f32
-    ::repeat::
-        obj_name        - utf8, 0 terminated
-        prop_name       - utf8, 0 terminated
-        frame_start     - u32
-        frame_end       - u32
-        type            - u8, "i" / "f" for i32 / f32
-        :: repeat for frame_start until frame_end (including) ::
-            value       - i32 / f32 depending on type
-    """
     print("Exporting custom props anim data...")
     f = open(filepath, 'wb')
 
