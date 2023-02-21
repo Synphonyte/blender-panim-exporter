@@ -13,16 +13,19 @@ import bpy
 import re
 import struct
 
+
 def i32(i):
     return struct.pack("<i", i)
+
 
 def u32(i):
     return struct.pack("<I", i)
 
+
 def f32(f):
     return struct.pack("<f", f)
-                    
-                    
+
+
 def write_anim_data(context, filepath):
     """
     fps - f32
@@ -45,32 +48,32 @@ def write_anim_data(context, filepath):
     for obj in bpy.data.objects:
         if obj.animation_data is not None and len(obj.animation_data.action.fcurves) == 1:
             action = obj.animation_data.action
-            
+
             m = re.match(pattern, action.fcurves[0].data_path)
             if m is not None:
                 f.write(obj.name.encode('utf-8'))
-                f.write(b'\0') # 0-terminated string
-                
+                f.write(b'\0')  # 0-terminated string
+
                 name = m.group(1)
                 f.write(name.encode('utf-8'))
-                f.write(b'\0') # 0-terminated string
-                
+                f.write(b'\0')  # 0-terminated string
+
                 frame_start, frame_end = [int(x) for x in action.frame_range]
-                
+
                 f.write(u32(frame_start))
                 f.write(u32(frame_end))
-                
+
                 typ = b'i' if type(obj[name]) is int else b'f'
                 f.write(typ)
-                
+
                 for frame in range(frame_start, frame_end + 1):
                     bpy.context.scene.frame_set(frame)
-                    
+
                     if typ == b'i':
                         f.write(i32(obj[name]))
                     else:
                         f.write(f32(obj[name]))
-                        
+
     f.close()
 
     return {'FINISHED'}
