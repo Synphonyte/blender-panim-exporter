@@ -12,15 +12,15 @@ The file format is a binary format that is designed to be as compact as possible
 shows the format of the file. It's given as `field_name - type`. All data is stored in little endian byte order.
 
 ```
-fps - f32
+frames_per_second - f32
 <repeat for all objects and custom properties>
     object_name     - utf8 string, 0 terminated
     property_name   - utf8 string, 0 terminated
     frame_start     - u32
     frame_end       - u32
-    type            - u8, "i" / "f" for i32 / f32
+    value_type      - u8, character "i" / "f" for i32 / f32
     <repeat for every frame between frame_start until frame_end (including)>
-        value       - i32 / f32 depending on type
+        value       - i32 / f32 depending on value_type
     </repeat>
 </repeat>
 ```
