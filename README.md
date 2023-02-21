@@ -1,10 +1,10 @@
-# blender-panim-exporter
+# Blender PANIM Exporter
 
 Export all animations of custom properties in a Blender file as a binary .panim file
 
 ## Installation
 
-Download the file io_export_panim.py and [install it in Blender as an addon](https://docs.blender.org/manual/en/latest/editors/preferences/addons.html#installing-add-ons).
+Download the file [io_export_panim.py](https://raw.githubusercontent.com/Synphonyte/blender-panim-exporter/main/io_export_panim.py) and [install it in Blender as an addon](https://docs.blender.org/manual/en/latest/editors/preferences/addons.html#installing-add-ons).
 
 ## File format
 
