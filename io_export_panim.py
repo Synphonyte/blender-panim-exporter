@@ -75,7 +75,7 @@ from bpy.types import Operator
 
 class ExportCustomPropsAnim(Operator, ExportHelper):
     """Export all animations of all custom properties"""
-    bl_idname = "export_custom_props_anim.synphonyte.com"
+    bl_idname = "export_custom_props_anim.synphonyte_com"
     bl_label = "Export Custom Props Anim"
 
     filename_ext = ".panim"
