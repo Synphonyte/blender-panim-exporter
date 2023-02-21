@@ -14,8 +14,8 @@ shows the format of the file. It's given as `field_name - type`. All data is sto
 ```
 frames_per_second - f32
 <repeat for all objects and custom properties>
-    object_name     - utf8 string, 0 terminated
-    property_name   - utf8 string, 0 terminated
+    object_name     - utf8 string, 0-terminated
+    property_name   - utf8 string, 0-terminated
     frame_start     - u32
     frame_end       - u32
     value_type      - u8, character "i" / "f" for i32 / f32
