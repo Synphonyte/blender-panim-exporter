@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Export custom props anim (.panim)",
     "author": "Marc-Stefan Cassola (maccesch)",
-    "version": (1, 0, 0),
+    "version": (0, 2, 0),
     "blender": (3, 4, 0),
     "location": "File > Export > Custom Props Anim (.panim)",
     "description": "Export all animations of custom properties as a binary .panim file",
@@ -12,7 +12,6 @@ bl_info = {
 import bpy
 import re
 import struct
-
 
 def i32(i):
     return struct.pack("<i", i)
@@ -25,10 +24,13 @@ def u32(i):
 def f32(f):
     return struct.pack("<f", f)
 
-
 def write_anim_data(context, filepath):
     print("Exporting custom props anim data...")
     f = open(filepath, 'wb')
+
+    major, minor, patch = bl_info["version"]
+    file_version = ((major * 1024) + minor) * 1024 + patch
+    f.write(u32(file_version))
 
     f.write(f32(bpy.data.scenes["Scene"].render.fps))
 
@@ -52,16 +54,15 @@ def write_anim_data(context, filepath):
                 f.write(u32(frame_start))
                 f.write(u32(frame_end))
 
-                typ = b'i' if type(obj[name]) is int else b'f'
+                typ = b'\0' # TODO : support other types like vector values and so on
                 f.write(typ)
+
+                reserved_per_prop_data = b'\0' * 32
+                f.write(reserved_per_prop_data)
 
                 for frame in range(frame_start, frame_end + 1):
                     bpy.context.scene.frame_set(frame)
-
-                    if typ == b'i':
-                        f.write(i32(obj[name]))
-                    else:
-                        f.write(f32(obj[name]))
+                    f.write(f32(obj[name]))
 
     f.close()
 
