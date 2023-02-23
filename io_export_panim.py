@@ -29,8 +29,12 @@ def write_anim_data(context, filepath):
     f = open(filepath, 'wb')
 
     major, minor, patch = bl_info["version"]
-    file_version = ((major * 1024) + minor) * 1024 + patch
-    f.write(u32(file_version))
+    major = u32(major << 20)
+    minor = u32(minor << 10)
+    patch = u32(patch)
+
+    file_version = bytes(x | y | z for (x, y), z in zip(zip(major, minor), patch))
+    f.write(file_version)
 
     f.write(f32(bpy.data.scenes["Scene"].render.fps))
 
