@@ -41,32 +41,33 @@ def write_anim_data(context, filepath):
     pattern = re.compile(r'\["([^"]+)"\]')
 
     for obj in bpy.data.objects:
-        if obj.animation_data is not None and len(obj.animation_data.action.fcurves) == 1:
+        if obj.animation_data is not None:
             action = obj.animation_data.action
 
-            m = re.match(pattern, action.fcurves[0].data_path)
-            if m is not None:
-                f.write(obj.name.encode('utf-8'))
-                f.write(b'\0')  # 0-terminated string
+            for fcurve in action.fcurves:
+                m = re.match(pattern, fcurve.data_path)
+                if m is not None:
+                    f.write(obj.name.encode('utf-8'))
+                    f.write(b'\0')  # 0-terminated string
 
-                name = m.group(1)
-                f.write(name.encode('utf-8'))
-                f.write(b'\0')  # 0-terminated string
+                    name = m.group(1)
+                    f.write(name.encode('utf-8'))
+                    f.write(b'\0')  # 0-terminated string
 
-                frame_start, frame_end = [int(x) for x in action.frame_range]
+                    frame_start, frame_end = [int(x) for x in fcurve.range()]
 
-                f.write(u32(frame_start))
-                f.write(u32(frame_end))
+                    f.write(u32(frame_start))
+                    f.write(u32(frame_end))
 
-                typ = b'\0' # TODO : support other types like vector values and so on
-                f.write(typ)
+                    typ = b'\0' # TODO : support other types like vector values and so on
+                    f.write(typ)
 
-                reserved_per_prop_data = b'\0' * 32
-                f.write(reserved_per_prop_data)
+                    reserved_per_prop_data = b'\0' * 32
+                    f.write(reserved_per_prop_data)
 
-                for frame in range(frame_start, frame_end + 1):
-                    bpy.context.scene.frame_set(frame)
-                    f.write(f32(obj[name]))
+                    for frame in range(frame_start, frame_end + 1):
+                        bpy.context.scene.frame_set(frame)
+                        f.write(f32(obj[name]))
 
     f.close()
 
